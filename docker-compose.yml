@@ -17,7 +17,7 @@ services:
       MAX_PLAYERS: "5"
       ENABLE_COMMAND_BLOCK: "true"
       MODE: "SURVIVAL"
-      MOTD: "Biomes Of Plenty 1.16.1"
+      MOTD: "https://github.com/dessyd/minecraft-biomesofplenty/wiki"
       INIT_MEMORY: "1G"
       MAX_MEMORY: "6G"
       LEVEL: "Ze World"
@@ -38,7 +38,7 @@ services:
       BACKUP_INTERVAL: "1d"
       PRUNE_BACKUPS_DAYS: "5"
       LINK_LATEST: "TRUE"
-      INITIAL_DELAY: "2m"
+      INITIAL_DELAY: "5m"
       # instead of network_mode below, could declare RCON_HOST
       # RCON_HOST: mc
     volumes:
@@ -61,4 +61,4 @@ services:
       RWA_RCON_PASSWORD: minecraft
     ports:
       - 4326:4326
-      - 4327:4327 
+      - 4327:4327

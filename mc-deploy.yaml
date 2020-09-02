@@ -34,6 +34,8 @@ spec:
               value: "5"
             - name: ENABLE_COMMAND_BLOCK
               value: "TRUE"
+            - name: ENFORCE_WHITELIST
+              value: "TRUE"
             - name: MODE
               value: "CREATIVE"
             - name: MOTD

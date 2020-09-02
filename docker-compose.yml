@@ -1,0 +1,64 @@
+version: "3.7"
+
+services:
+  mc:
+    image: itzg/minecraft-server
+    ports:
+    # expose the Minecraft server port outside of container
+    - 25571:25565
+    environment:
+      # REQUIRED for all types
+      EULA: "TRUE"
+      # Set server type (vs the default of vanilla)
+      TYPE: "FORGE"
+      VERSION: "1.16.1"
+      OPS: "T0t0r42"
+      OVERRIDE_SERVER_PROPERTIES: "true"
+      MAX_PLAYERS: "5"
+      ENABLE_COMMAND_BLOCK: "true"
+      MODE: "SURVIVAL"
+      MOTD: "Biomes Of Plenty 1.16.1"
+      INIT_MEMORY: "1G"
+      MAX_MEMORY: "6G"
+      LEVEL: "Ze World"
+      ALLOW_FLIGHT: "true"
+      LEVEL_TYPE: "biomesoplenty"
+      MODPACK: "http://dessy.be/mods/biomesofplenty-modpack.zip"
+      # UID GID of myself in group users
+      UID: "1027"
+      GID: "100"
+      TZ: "Europe/Brussels"
+    restart: always
+    volumes:
+    # use a named, managed volume for data volume
+    - ./data:/data
+  backups:
+    image: itzg/mc-backup
+    environment:
+      BACKUP_INTERVAL: "1d"
+      PRUNE_BACKUPS_DAYS: "5"
+      LINK_LATEST: "TRUE"
+      INITIAL_DELAY: "2m"
+      # instead of network_mode below, could declare RCON_HOST
+      # RCON_HOST: mc
+    volumes:
+    # mount the same volume used by server, but read-only
+    - ./data:/data:ro
+    # use a host attached directory so that it in turn can be backed up
+    # to external/cloud storage
+    - ./mc-backups:/backups
+    # share network namespace with server to simplify rcon access
+    network_mode: "service:mc"
+  web:
+    image: itzg/rcon
+    environment:
+      RWA_USERNAME: admin
+      RWA_PASSWORD: admin
+      RAW_ADMIN: "TRUE"
+      # is referring to the hostname of 'mc' compose service below
+      RWA_RCON_HOST: mc
+      # needs to match the password configured for the container, which is 'minecraft' by default
+      RWA_RCON_PASSWORD: minecraft
+    ports:
+      - 4326:4326
+      - 4327:4327 

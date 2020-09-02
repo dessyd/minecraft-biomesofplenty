@@ -5,7 +5,7 @@ services:
     image: itzg/minecraft-server
     ports:
     # expose the Minecraft server port outside of container
-    - 25571:25565
+    - 25565:25565
     environment:
       # REQUIRED for all types
       EULA: "TRUE"
@@ -16,6 +16,7 @@ services:
       OVERRIDE_SERVER_PROPERTIES: "true"
       MAX_PLAYERS: "5"
       ENABLE_COMMAND_BLOCK: "true"
+      ENFORCE_WHITELIST: "TRUE"
       MODE: "SURVIVAL"
       MOTD: "https://github.com/dessyd/minecraft-biomesofplenty/wiki"
       INIT_MEMORY: "1G"

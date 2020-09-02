@@ -8,7 +8,7 @@ services:
     - 25565:25565
     environment:
       # REQUIRED for all types
-      EULA: "TRUE"
+      EULA: "true"
       # Set server type (vs the default of vanilla)
       TYPE: "FORGE"
       VERSION: "1.16.1"
@@ -16,7 +16,7 @@ services:
       OVERRIDE_SERVER_PROPERTIES: "true"
       MAX_PLAYERS: "5"
       ENABLE_COMMAND_BLOCK: "true"
-      ENFORCE_WHITELIST: "TRUE"
+      ENFORCE_WHITELIST: "true"
       MODE: "SURVIVAL"
       MOTD: "https://github.com/dessyd/minecraft-biomesofplenty/wiki"
       INIT_MEMORY: "1G"

@@ -4,7 +4,7 @@ eksctl create cluster \
 --region us-east-1 \
 --nodegroup-name linux-nodes \
 --node-type t3.medium \
---nodes 3 \
+--nodes 1 \
 --nodes-min 1 \
 --nodes-max 4 \
 --ssh-access \

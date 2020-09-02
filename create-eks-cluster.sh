@@ -1,0 +1,12 @@
+eksctl create cluster \
+--name mc \
+--version 1.17 \
+--region us-east-1 \
+--nodegroup-name linux-nodes \
+--node-type t3.medium \
+--nodes 3 \
+--nodes-min 1 \
+--nodes-max 4 \
+--ssh-access \
+--ssh-public-key dd-demo \
+--managed

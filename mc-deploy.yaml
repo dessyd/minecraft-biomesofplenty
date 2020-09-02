@@ -1,0 +1,112 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: mc-with-backup
+  name: mc-with-backup
+spec:
+  replicas: 1
+  serviceName: mc-svc
+  selector:
+    matchLabels:
+      app: mc-k8s
+  template:
+    metadata:
+      labels:
+        app: mc-k8s
+    spec:
+      containers:
+        - name: mc
+          image: itzg/minecraft-server
+          env:
+            - name: EULA
+              value: "TRUE"
+            - name: TYPE
+              value: "FORGE"
+            - name: VERSION
+              value: "1.16.1"
+            - name: OPS
+              value: "ShingouzAndCo"
+            - name: OVERRIDE_SERVER_PROPERTIES
+              value: "TRUE"
+            - name: MAX_PLAYERS
+              value: "5"
+            - name: ENABLE_COMMAND_BLOCK
+              value: "TRUE"
+            - name: MODE
+              value: "CREATIVE"
+            - name: MOTD
+              value: "Biomes (k8s)"
+            - name: INIT_MEMORY
+              value: "1G"
+            - name: MAX_MEMORY
+              value: "3G"
+            - name: LEVEL
+              value: "Biomes"
+            - name: ALLOW_FLIGHT
+              value: "TRUE"
+            - name: LEVEL_TYPE
+              value: "biomesoplenty"
+            - name: MODPACK
+              value: "http://dessy.be/mods/biomesofplenty-modpack.zip"
+            - name: TZ
+              value: "Europe/Brussels"
+          volumeMounts:
+            - mountPath: /data
+              name: data
+        - name: backup
+          image: itzg/mc-backup
+          securityContext:
+            runAsUser: 1000
+          env:
+            - name: BACKUP_INTERVAL
+              value: "1d"
+            - name: PRUNE_BACKUPS_DAYS
+              value: "5"
+            - name: LINK_LATEST
+              value: "TRUE"
+            - name: INITIAL_DELAY
+              value: "2m"
+          volumeMounts:
+            - mountPath: /data
+              name: data
+              readOnly: false
+            - mountPath: /backups
+              name: backups
+              readOnly: false
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: data
+        - name: backups
+          persistentVolumeClaim:
+            claimName: backups
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 3Gi
+    - metadata:
+        name: backups
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mc-svc
+spec:
+  selector:
+    app: mc-k8s
+  ports:
+    - port: 25565
+  type: LoadBalancer

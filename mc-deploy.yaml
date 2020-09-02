@@ -67,7 +67,7 @@ spec:
             - name: LINK_LATEST
               value: "TRUE"
             - name: INITIAL_DELAY
-              value: "2m"
+              value: "5m"
           volumeMounts:
             - mountPath: /data
               name: data

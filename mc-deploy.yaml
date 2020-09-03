@@ -61,8 +61,6 @@ spec:
               name: data
         - name: backup
           image: itzg/mc-backup
-          securityContext:
-            runAsUser: 1000
           env:
             - name: BACKUP_INTERVAL
               value: "1d"
